@@ -19,10 +19,19 @@ function crearEquipo(req, res) {
         Equipo.findOne({ nombre: params.nombre }, (err, equipoEncontrado) => {
             if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
             if (!equipoEncontrado) {
-                equipoModel.save((err, equipoguardado) => {
+                Equipo.find((err, equipos) => {
                     if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
-                    if (!equipoguardado) return res.status(500).send({ mensaje: 'no se guardó el equipo' });
-                    return res.status(200).send({ equipoguardado });
+
+                    if (equipos.length >= 10) {
+                        return res.status(500).send({ mensaje: 'maximo de equipos alcanzado' });
+                    } else {
+                        equipoModel.save((err, equipoguardado) => {
+                            if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
+                            if (!equipoguardado) return res.status(500).send({ mensaje: 'no se guardó el equipo' });
+                            return res.status(200).send({ equipoguardado });
+
+                        });
+                    }
                 });
 
             } else {
