@@ -78,7 +78,7 @@ function crearUsuario(req, res) {
                     usuarioModel.save((err, usuarioguardado) => {
                         if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
                         if (usuarioguardado) {
-                            res.status(200).send("Usuario registrado");
+                            res.status(200).send({ usuarioguardado });
                         } else {
                             res.status(500).send({ mensaje: "Error al registrar el usuario" });
                         }
