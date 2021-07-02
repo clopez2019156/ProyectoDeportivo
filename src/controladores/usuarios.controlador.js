@@ -1,6 +1,7 @@
 'use stict'
 
 var Usuario = require("../modelos/usuarios.model");
+var Liga = require("../modelos/ligas.model");
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require("../servicios/jwt");
 
@@ -64,6 +65,7 @@ function crearUsuario(req, res) {
     var params = req.body;
 
     if (params.username && params.password) {
+        usuarioModel.rol = "ROL_USER";
         Usuario.find({
             username: params.username
         }).exec((err, adminoEncontrado) => {
@@ -84,6 +86,45 @@ function crearUsuario(req, res) {
                 });
             }
         });
+    } else {
+        if (err) return res.status(500).send({ mensaje: "No puede dejar parametros vacios" });
+    }
+
+}
+
+function crearUsuarioAdmin(req, res) {
+
+    var usuarioModel = new Usuario();
+    var params = req.body;
+
+    if (params.username && params.password) {
+        if (req.user.rol === "ROL_ADMIN") {
+            usuarioModel.rol = "ROL_ADMIN";
+            Usuario.find({
+                username: params.username
+            }).exec((err, adminoEncontrado) => {
+                if (err) return console.log({ mensaje: "Error en la peticion" });
+                if (adminoEncontrado.length >= 1) {
+                    return res.status(500).send("Este usuario ya existe");
+                } else {
+                    bcrypt.hash(params.password, null, null, (err, passwordEncriptada) => {
+                        usuarioModel.password = passwordEncriptada;
+                        usuarioModel.save((err, usuarioguardado) => {
+                            if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
+                            if (usuarioguardado) {
+                                res.status(200).send("Usuario registrado");
+                            } else {
+                                res.status(500).send({ mensaje: "Error al registrar el usuario" });
+                            }
+                        });
+                    });
+                }
+            });
+        } else {
+            if (err) return res.status(500).send({ mensaje: "No tiene permisos " });
+        }
+    } else {
+        if (err) return res.status(500).send({ mensaje: "No puede dejar parametros vacios" });
     }
 
 }
@@ -140,7 +181,14 @@ function eliminarUsuario(req, res) {
         if (err) return res.status(500).send({ mensaje: 'Error en la peticion de Eliminar usuario' });
         if (!usuarioEliminado) return res.status(500).send({ mensaje: 'Error al eliminar el Usuario' });
 
-        return res.status(200).send({ usuarioEliminado })
+        Liga.deleteMany({ usuario: req.user.rol }, (err, ligasEliminadas) => {
+            if (err) return res.status(500).send({ mensaje: 'Error en la peticion' });
+            if (!usuarioEliminado) return res.status(500).send({ mensaje: 'Error al eliminar ligas' });
+
+            return res.status(200).send({ usuarioEliminado });
+
+        })
+
     }))
 }
 
@@ -153,5 +201,6 @@ module.exports = {
     obtenerUsuarioID,
     editarUsuario,
     eliminarUsuario,
-    crearUsuario
+    crearUsuario,
+    crearUsuarioAdmin
 }

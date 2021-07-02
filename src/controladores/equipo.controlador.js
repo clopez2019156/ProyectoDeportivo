@@ -1,8 +1,6 @@
 'use stict'
 
-var Usuario = require("../modelos/usuarios.model");
 var Equipo = require("../modelos/equipos.model");
-const { findByIdAndDelete } = require("../modelos/usuarios.model");
 
 
 function crearEquipo(req, res) {
@@ -71,7 +69,7 @@ function eliminarEquipo(req, res) {
 
     var EquipoId = req.params.id;
 
-    findByIdAndDelete(EquipoId, (err, equipoEliminado) => {
+    Equipo.findByIdAndDelete(EquipoId, (err, equipoEliminado) => {
         if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
         if (!equipoEliminado) res.status(500).send({ mensaje: 'no se pudo eliminar el equipo' });
 
