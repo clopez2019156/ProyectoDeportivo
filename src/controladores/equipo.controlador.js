@@ -16,7 +16,7 @@ function crearEquipo(req, res) {
         equipoModel.golesfavor = 0;
         equipoModel.golesContra = 0;
         equipoModel.diferenciaGoles = 0;
-        Equipo.findOne({ nombre: params.nombre }, (err, equipoEncontrado) => {
+        Equipo.findOne({ nombre: params.nombre, liga: params.liga }, (err, equipoEncontrado) => {
             if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
             if (!equipoEncontrado) {
                 Equipo.find((err, equipos) => {

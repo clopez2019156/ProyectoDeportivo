@@ -8,7 +8,7 @@ function crearLiga(req, res) {
     var ligaModel = new Liga();
     var params = req.body;
 
-    if (params.nombre && params.usuario) {
+    if (params.nombre) {
         ligaModel.nombre = params.nombre;
         ligaModel.usuario = req.user.sub;
         Liga.findOne({ nombre: params.nombre }, (err, ligaEncontrada) => {
