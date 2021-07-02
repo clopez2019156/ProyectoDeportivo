@@ -40,7 +40,7 @@ function crearEquipo(req, res) {
         });
 
     } else {
-
+        return res.status(500).send({ mensaje: 'faltan datos' });
     }
 
 }

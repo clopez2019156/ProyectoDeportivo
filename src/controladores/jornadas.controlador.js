@@ -7,6 +7,7 @@ function crearJornada(req, res) {
 
     var jornadaModel = new Jornada();
     var params = req.body;
+    var noEquipos = 0;
 
     if (params.nombre && params.liga) {
         jornadaModel.nombre = params.nombre;
@@ -17,6 +18,7 @@ function crearJornada(req, res) {
                 Equipo.find((err, equipoEncontrados) => {
                     if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
                     if (!equipoEncontrados) return res.status(500).send({ mensaje: 'no hay equipos todavía para crear jornadas' });
+                    noEquipos = equipoEncontrados.length;
 
                     jornadaModel.save((err, jornadaGuardada) => {
                         if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
