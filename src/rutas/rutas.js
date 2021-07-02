@@ -19,8 +19,8 @@ api.post("/crearUsuarioAdmin", md_autorizacion.ensureAuth, UsuarioControlador.cr
 
 
 //ligaControlador
-api.post("/crearLiga", ligaControlador.crearLiga);
-api.get("/verLigas", ligaControlador.verLigas);
+api.post("/crearLiga", md_autorizacion.ensureAuth, ligaControlador.crearLiga);
+api.get("/verLigas", md_autorizacion.ensureAuth, ligaControlador.verLigas);
 api.put("/editarLiga/:id", md_autorizacion.ensureAuth, ligaControlador.editarLiga);
 api.delete("/eliminarLiga/:id", md_autorizacion.ensureAuth, ligaControlador.eliminarLiga);
 

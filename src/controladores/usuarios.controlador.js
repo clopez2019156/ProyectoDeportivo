@@ -65,6 +65,7 @@ function crearUsuario(req, res) {
     var params = req.body;
 
     if (params.username && params.password) {
+        usuarioModel.username = params.username;
         usuarioModel.rol = "ROL_USER";
         Usuario.find({
             username: params.username
