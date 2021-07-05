@@ -37,8 +37,19 @@ function crearJornada(req, res) {
 
 }
 
+function agregarResultado(req, res) {
+    var params = req.body;
+
+    Equipo.find((err, noEquipos) => {
+        if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
+        if (!noEquipos) return res.status(500).send({ mensaje: 'no pueden haber jornadas si no hay equipos' });
+
+    });
+
+}
 
 
 module.exports = {
-    crearJornada
+    crearJornada,
+    agregarResultado
 }
