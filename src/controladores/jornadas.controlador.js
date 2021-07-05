@@ -7,7 +7,6 @@ function crearJornada(req, res) {
 
     var jornadaModel = new Jornada();
     var params = req.body;
-    var noEquipos = 0;
 
     if (params.nombre && params.liga) {
         jornadaModel.nombre = params.nombre;
@@ -18,12 +17,20 @@ function crearJornada(req, res) {
                 Equipo.find((err, equipoEncontrados) => {
                     if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
                     if (!equipoEncontrados) return res.status(500).send({ mensaje: 'no hay equipos todavía para crear jornadas' });
-                    noEquipos = equipoEncontrados.length;
 
-                    jornadaModel.save((err, jornadaGuardada) => {
+                    Jornada.find((err, noJornadas) => {
                         if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
-                        if (!jornadaGuardada) return res.status(500).send({ mensaje: 'no se guardó la jornada' });
-                        return res.status(200).send({ jornadaGuardada });
+                        if (!noJornadas) return res.status(500).send({ mensaje: 'no hay jornadas' });
+
+                        if (noJornadas.length < equipoEncontrados.length) {
+
+                            jornadaModel.save((err, jornadaGuardada) => {
+                                if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
+                                if (!jornadaGuardada) return res.status(500).send({ mensaje: 'no se guardó la jornada' });
+                                return res.status(200).send({ jornadaGuardada });
+                            });
+                        } else if (equipoEncontrados.length == 0)
+                            return res.status(500).send({ mensaje: 'aun no hay equipos' });
                     });
                 });
             } else {
@@ -37,19 +44,62 @@ function crearJornada(req, res) {
 
 }
 
-function agregarResultado(req, res) {
+function agregarResultado1(req, res) {
     var params = req.body;
+    var equipoModel = Equipo();
 
-    Equipo.find((err, noEquipos) => {
+    Equipo.findOne({ nombre: params.equipo }, (err, equipoEncontrado) => {
         if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
-        if (!noEquipos) return res.status(500).send({ mensaje: 'no pueden haber jornadas si no hay equipos' });
+
+        equipoModel.nombre = equipoEncontrado.nombre;
+        equipoModel.imagen = equipoEncontrado.imagen;
+        equipoModel.liga = equipoEncontrado.liga;
+        equipoModel.puntos = equipoEncontrado.puntos + params.golesEquipo1;
+        equipoModel.golesFavor = equipoEncontrado.golesFavor + params.golesEquipo1;
+        equipoModel.golesContra = equipoEncontrado.golesContra + params.equipo2;
+        equipoModel.diferenciaGoles = equipoModel.golesFavor - equipoModel.golesContra;
+
+        Equipo.findByIdAndUpdate(equipoEncontrado.id, equipoModel, { new: true }, (err, equipoActualizado) => {
+            if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
+            if (!equipoActualizado) return res.status(500).send({ mensaje: 'no se actualizó el equipo' });
+
+            return res.status(200).send({ equipoActualizado });
+        });
 
     });
 
+
 }
 
+function agregarResultado2(req, res) {
+    var params = req.body;
+    var equipoModel = Equipo();
+
+    Equipo.findOne({ nombre: params.equipo }, (err, equipoEncontrado) => {
+        if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
+
+        equipoModel.nombre = equipoEncontrado.nombre;
+        equipoModel.imagen = equipoEncontrado.imagen;
+        equipoModel.liga = equipoEncontrado.liga;
+        equipoModel.puntos = equipoEncontrado.puntos + params.golesEquipo2;
+        equipoModel.golesFavor = equipoEncontrado.golesFavor + params.golesEquipo2;
+        equipoModel.golesContra = equipoEncontrado.golesContra + params.equipo1;
+        equipoModel.diferenciaGoles = equipoModel.golesFavor - equipoModel.golesContra;
+
+        Equipo.findByIdAndUpdate(equipoEncontrado.id, equipoModel, { new: true }, (err, equipoActualizado) => {
+            if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
+            if (!equipoActualizado) return res.status(500).send({ mensaje: 'no se actualizó el equipo' });
+
+            return res.status(200).send({ equipoActualizado });
+        });
+
+    });
+
+
+}
 
 module.exports = {
     crearJornada,
-    agregarResultado
+    agregarResultado1,
+    agregarResultado2
 }
