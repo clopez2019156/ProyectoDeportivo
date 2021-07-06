@@ -67,6 +67,7 @@ function crearUsuario(req, res) {
     if (params.username && params.password) {
         usuarioModel.username = params.username;
         usuarioModel.rol = "ROL_USER";
+
         Usuario.find({
             username: params.username
         }).exec((err, adminoEncontrado) => {
@@ -99,7 +100,9 @@ function crearUsuarioAdmin(req, res) {
     var params = req.body;
 
     if (params.username && params.password) {
+
         if (req.user.rol === "ROL_ADMIN") {
+            usuarioModel.username = params.username;
             usuarioModel.rol = "ROL_ADMIN";
             Usuario.find({
                 username: params.username
@@ -113,7 +116,7 @@ function crearUsuarioAdmin(req, res) {
                         usuarioModel.save((err, usuarioguardado) => {
                             if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
                             if (usuarioguardado) {
-                                res.status(200).send("Usuario registrado");
+                                res.status(200).send({ usuarioguardado });
                             } else {
                                 res.status(500).send({ mensaje: "Error al registrar el usuario" });
                             }

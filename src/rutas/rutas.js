@@ -14,7 +14,7 @@ api.post("/login", UsuarioControlador.login);
 api.get("/obtenerUsuarios", UsuarioControlador.obtenerUsuarios);
 api.post("/obtenerUsuarioID/:id", md_autorizacion.ensureAuth, UsuarioControlador.obtenerUsuarioID);
 api.put("/editarUsuario/:id", md_autorizacion.ensureAuth, UsuarioControlador.editarUsuario);
-api.delete("/eliminarUsuario/:id", md_autorizacion.ensureAuth, UsuarioControlador.eliminarUsuario);
+api.delete("/eliminarUsuario/:id", UsuarioControlador.eliminarUsuario);
 api.post("/crearUsuario", UsuarioControlador.crearUsuario);
 api.post("/crearUsuarioAdmin", md_autorizacion.ensureAuth, UsuarioControlador.crearUsuarioAdmin);
 
@@ -27,7 +27,7 @@ api.delete("/eliminarLiga/:id", md_autorizacion.ensureAuth, ligaControlador.elim
 
 
 //equipoControlador
-api.post("/crearEquipo", EquipoControlador.crearEquipo);
+api.post("/crearEquipo", md_autorizacion.ensureAuth, EquipoControlador.crearEquipo);
 api.post("/verEquipos", EquipoControlador.verEquipos);
 api.put("/editarEquipo/:id", md_autorizacion.ensureAuth, EquipoControlador.editarEquipo);
 api.delete("/eliminarEquipo/:id", md_autorizacion.ensureAuth, EquipoControlador.eliminarEquipo);
@@ -35,8 +35,8 @@ api.delete("/eliminarEquipo/:id", md_autorizacion.ensureAuth, EquipoControlador.
 
 //jornadasControlador
 api.post("/crearJornada", md_autorizacion.ensureAuth, JornadaControlador.crearJornada);
-api.post("agregarResultado1", md_autorizacion.ensureAuth, JornadaControlador.agregarResultado1);
-api.post("agregarResultado2", md_autorizacion.ensureAuth, JornadaControlador.agregarResultado2);
+api.post("/agregarResultado1", md_autorizacion.ensureAuth, JornadaControlador.agregarResultado1);
+api.post("/agregarResultado2", md_autorizacion.ensureAuth, JornadaControlador.agregarResultado2);
 
 
 

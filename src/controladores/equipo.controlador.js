@@ -9,6 +9,7 @@ function crearEquipo(req, res) {
     var params = req.body;
 
     if (params.nombre && params.liga) {
+        equipoModel.usuario = req.user.sub;
         equipoModel.nombre = params.nombre;
         equipoModel.liga = params.liga;
         equipoModel.imagen = null;
@@ -16,7 +17,7 @@ function crearEquipo(req, res) {
         equipoModel.golesfavor = 0;
         equipoModel.golesContra = 0;
         equipoModel.diferenciaGoles = 0;
-        Equipo.findOne({ nombre: params.nombre, liga: params.liga }, (err, equipoEncontrado) => {
+        Equipo.findOne({ nombre: params.nombre, liga: params.liga, usuario: req.user.sub }, (err, equipoEncontrado) => {
             if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
             if (!equipoEncontrado) {
                 Equipo.find((err, equipos) => {

@@ -11,7 +11,7 @@ function crearLiga(req, res) {
     if (params.nombre) {
         ligaModel.nombre = params.nombre;
         ligaModel.usuario = req.user.sub;
-        Liga.findOne({ nombre: params.nombre }, (err, ligaEncontrada) => {
+        Liga.findOne({ nombre: params.nombre, usuario: req.user.sub }, (err, ligaEncontrada) => {
             if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
             if (!ligaEncontrada) {
                 ligaModel.save((err, ligaGuardada) => {
