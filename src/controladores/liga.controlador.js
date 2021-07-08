@@ -72,10 +72,20 @@ function eliminarLiga(req, res) {
 
 }
 
+function obtenerLiga(req, res) {
+    var id = req.params.id;
+
+    Liga.findOne({ _id: id }, (err, liga_registrado) => {
+        if (err) return res.status(500).send({ mensaje: "Error en peticion" });
+        if (!liga_registrado) return res.status(500).send({ mensaje: "Error en peticion" });
+        return res.status(200).send({ liga_registrado });
+    })
+
+}
 module.exports = {
     crearLiga,
     verLigas,
     editarLiga,
-    eliminarLiga
-
+    eliminarLiga,
+    obtenerLiga
 }

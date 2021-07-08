@@ -4,6 +4,7 @@ var Usuario = require("../modelos/usuarios.model");
 var Liga = require("../modelos/ligas.model");
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require("../servicios/jwt");
+const ligaModel = require("../modelos/ligas.model");
 
 
 
@@ -205,7 +206,22 @@ function eliminarUsuario(req, res) {
     }))
 }
 
+function buscarLiga(req, res) {
+    var params = req.body;
+    ligaModel.findOne({ nombre: params.nombre }, (err, ligaEncontrada) => {
+        if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
+        if (!ligaEncontrada) {
+            if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
+            if (!ligaEncontrada) return res.status(500).send({ mensaje: 'este hotel no existe' });
 
+            return res.status(200).send({ ligaEncontrada });
+
+        } else {
+            return res.status(200).send({ ligaEncontrada });
+        }
+    });
+
+}
 
 module.exports = {
     adminApp,
@@ -216,5 +232,6 @@ module.exports = {
     eliminarUsuario,
     crearUsuario,
     crearUsuarioAdmin,
-    verCuenta
+    verCuenta,
+    buscarLiga
 }

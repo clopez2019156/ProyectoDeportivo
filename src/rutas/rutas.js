@@ -24,6 +24,8 @@ api.post("/crearLiga", md_autorizacion.ensureAuth, ligaControlador.crearLiga);
 api.get("/verLigas", md_autorizacion.ensureAuth, ligaControlador.verLigas);
 api.put("/editarLiga/:id", md_autorizacion.ensureAuth, ligaControlador.editarLiga);
 api.delete("/eliminarLiga/:id", md_autorizacion.ensureAuth, ligaControlador.eliminarLiga);
+api.get("/obtenerLiga/:id", md_autorizacion.ensureAuth, ligaControlador.obtenerLiga);
+
 
 
 //equipoControlador
@@ -39,5 +41,7 @@ api.post("/agregarResultado1", md_autorizacion.ensureAuth, JornadaControlador.ag
 api.post("/agregarResultado2", md_autorizacion.ensureAuth, JornadaControlador.agregarResultado2);
 
 
+api.post("/buscarLiga", UsuarioControlador.buscarLiga);
+//api.post("/mostrarLigas", UsuarioControlador.mostrarHoteles);
 
 module.exports = api;
