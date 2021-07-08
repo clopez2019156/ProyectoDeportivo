@@ -12,8 +12,7 @@ function crearEquipo(req, res) {
         equipoModel.usuario = req.user.sub;
         equipoModel.nombre = params.nombre;
         equipoModel.liga = params.liga;
-        equipoModel.imagen = null;
-        equipoModel.puntos = null;
+        equipoModel.puntos = 0;
         equipoModel.golesfavor = 0;
         equipoModel.golesContra = 0;
         equipoModel.diferenciaGoles = 0;
@@ -23,7 +22,7 @@ function crearEquipo(req, res) {
                 Equipo.find((err, equipos) => {
                     if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
 
-                    if (equipos.length >= 10) {
+                    if (equipos.length >= 100) {
                         return res.status(500).send({ mensaje: 'maximo de equipos alcanzado' });
                     } else {
                         equipoModel.save((err, equipoguardado) => {
@@ -49,13 +48,14 @@ function crearEquipo(req, res) {
 function verEquipos(req, res) {
 
     var params = req.body;
+    if (params.liga) {
+        Equipo.find({ liga: params.liga }, (err, equiposEncontrados) => {
+            if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
+            if (!equiposEncontrados) return res.status(500).send({ mensaje: 'Aún no hay equipos' });
 
-    Equipo.find({ liga: params.liga }, (err, equiposEncontrados) => {
-        if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
-        if (!equiposEncontrados) return res.status(500).send({ mensaje: 'Aún no hay equipos' });
-
-        return res.status(200).send({ equiposEncontrados });
-    });
+            return res.status(200).send({ equiposEncontrados });
+        });
+    }
 }
 
 function editarEquipo(req, res) {
