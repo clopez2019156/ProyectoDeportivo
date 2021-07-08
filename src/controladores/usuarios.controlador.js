@@ -133,6 +133,15 @@ function crearUsuarioAdmin(req, res) {
 
 }
 
+function verCuenta(req, res) {
+    Usuario.findById(req.user.sub, (err, usuarioEncontrado) => {
+        if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
+        if (!usuarioEncontrado) return res.status(500).send({ mensaje: 'error al buscar usuario' });
+
+        return res.status(200).send({ usuarioEncontrado });
+    })
+}
+
 function obtenerUsuarios(req, res) {
 
     Usuario.find().exec((err, usuarios) => {
@@ -206,5 +215,6 @@ module.exports = {
     editarUsuario,
     eliminarUsuario,
     crearUsuario,
-    crearUsuarioAdmin
+    crearUsuarioAdmin,
+    verCuenta
 }

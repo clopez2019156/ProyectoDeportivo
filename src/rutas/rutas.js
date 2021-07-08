@@ -12,12 +12,12 @@ var JornadaControlador = require("../controladores/jornadas.controlador");
 //usuarioControlador
 api.post("/login", UsuarioControlador.login);
 api.get("/obtenerUsuarios", UsuarioControlador.obtenerUsuarios);
-api.post("/obtenerUsuarioID/:id", md_autorizacion.ensureAuth, UsuarioControlador.obtenerUsuarioID);
+api.post("/obtenerUsuarioID/:id", UsuarioControlador.obtenerUsuarioID);
 api.put("/editarUsuario/:id", md_autorizacion.ensureAuth, UsuarioControlador.editarUsuario);
 api.delete("/eliminarUsuario/:id", UsuarioControlador.eliminarUsuario);
 api.post("/crearUsuario", UsuarioControlador.crearUsuario);
 api.post("/crearUsuarioAdmin", md_autorizacion.ensureAuth, UsuarioControlador.crearUsuarioAdmin);
-
+api.get("/verCuenta", md_autorizacion.ensureAuth, UsuarioControlador.verCuenta);
 
 //ligaControlador
 api.post("/crearLiga", md_autorizacion.ensureAuth, ligaControlador.crearLiga);

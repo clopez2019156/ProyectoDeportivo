@@ -81,10 +81,7 @@ function agregarResultado1(req, res) {
 
 
         });
-
     });
-
-
 }
 
 function agregarResultado2(req, res) {
