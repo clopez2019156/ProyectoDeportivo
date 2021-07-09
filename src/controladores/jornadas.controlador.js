@@ -52,7 +52,6 @@ function agregarResultado1(req, res) {
         if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
 
         equipoModel.nombre = equipoEncontrado.nombre;
-        equipoModel.imagen = equipoEncontrado.imagen;
         equipoModel.liga = equipoEncontrado.liga;
         equipoModel.puntos = equipoEncontrado.puntos + params.golesEquipo1;
         equipoModel.golesFavor = equipoEncontrado.golesFavor + params.golesEquipo1;
@@ -63,18 +62,16 @@ function agregarResultado1(req, res) {
             if (err) return res.status(500).send({ mensaje: 'error en la peticion' });
             if (!equipoActualizado) return res.status(500).send({ mensaje: 'no se actualizó el equipo' });
 
-
-
-            Hotel.updateOne({ nombre: params.equipo }, {
+            Equipo.updateOne({ nombre: params.equipo }, {
                 $push: {
                     enfrentamientos: {
                         enfrentamiento: params.equipo + " vs " + params.equipo2,
                         resultado: params.golesEquipo1 + " - " + params.golesEquipo2
                     }
                 }
-            }, (err, habitacionAgregada) => {
+            }, (err, resultadoAgregada) => {
 
-                return res.status(200).send({ habitacionAgregada });
+                return res.status(200).send({ resultadoAgregada });
 
             })
 

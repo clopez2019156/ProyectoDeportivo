@@ -171,9 +171,6 @@ function editarUsuario(req, res) {
     delete params.password;
     delete params.rol;
 
-    if (idUsuario != req.user.sub) {
-        return res.status(500).send({ mensaje: 'No posee los permisos para editar ese usuario' });
-    }
 
     Usuario.findByIdAndUpdate(idUsuario, params, { new: true }, (err, usuarioActualizado) => {
         if (err) return res.status(500).send({ mensaje: 'Error en la peticion' });
@@ -186,7 +183,6 @@ function editarUsuario(req, res) {
 
 function eliminarUsuario(req, res) {
     var idUsuario = req.params.id;
-
     if (req.user.rol != "ROL_ADMIN") {
         return res.status(500).send({ mensaje: 'Solo el administrador puede eliminar al Usuario' });
     }
@@ -195,7 +191,7 @@ function eliminarUsuario(req, res) {
         if (err) return res.status(500).send({ mensaje: 'Error en la peticion de Eliminar usuario' });
         if (!usuarioEliminado) return res.status(500).send({ mensaje: 'Error al eliminar el Usuario' });
 
-        Liga.deleteMany({ usuario: req.user.rol }, (err, ligasEliminadas) => {
+        Liga.deleteMany({ usuario: req.user.sub }, (err, ligasEliminadas) => {
             if (err) return res.status(500).send({ mensaje: 'Error en la peticion' });
             if (!usuarioEliminado) return res.status(500).send({ mensaje: 'Error al eliminar ligas' });
 

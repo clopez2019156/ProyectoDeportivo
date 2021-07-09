@@ -13,7 +13,7 @@ var JornadaControlador = require("../controladores/jornadas.controlador");
 api.post("/login", UsuarioControlador.login);
 api.get("/obtenerUsuarios", UsuarioControlador.obtenerUsuarios);
 api.post("/obtenerUsuarioID/:id", UsuarioControlador.obtenerUsuarioID);
-api.put("/editarUsuario/:id", md_autorizacion.ensureAuth, UsuarioControlador.editarUsuario);
+api.put("/editarUsuario/:id", UsuarioControlador.editarUsuario);
 api.delete("/eliminarUsuario/:id", UsuarioControlador.eliminarUsuario);
 api.post("/crearUsuario", UsuarioControlador.crearUsuario);
 api.post("/crearUsuarioAdmin", md_autorizacion.ensureAuth, UsuarioControlador.crearUsuarioAdmin);
